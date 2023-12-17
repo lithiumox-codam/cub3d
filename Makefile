@@ -5,10 +5,12 @@ vpath %.h include
 SRC = main.c parser/index.c
 LIBS = MLX42/build/libmlx42.a libft/libft.a
 OBJS = $(addprefix build/, $(SRC:.c=.o))
-CODAM_FLAGS = -Wall -Wextra -Werror -Ofast -flto
+CODAM_FLAGS = -Wall -Wextra -Werror -Ofast -flto $(if $(DEBUG),-g3)
 INCLUDES = -I $(CURDIR)/include -I MLX42/include/MLX42 -I libft/includes
 MLX = MLX42/build/libmlx42.a
 LIBFT = libft/libft.a
+
+DEBUG = 0
 
 ifeq ($(shell uname -m),arm64)
 LINKERS = -L/opt/homebrew/lib -lglfw -framework IOKit -framework Cocoa
