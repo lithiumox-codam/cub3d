@@ -6,53 +6,62 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:20:25 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/17 20:35:31 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/18 23:22:06 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-char	*return_string(t_vector *v)
+void	clear_2d_array(t_map_types **array, int height)
 {
-	char	*str;
+	int	i;
 
-	vec_resize(v, v->length + 1);
-	vec_char_push(v, '\0');
-	str = (char *)v->data;
-	return (str);
-}
-
-void	push_string(t_vector *v, char *str)
-{
-	while (*str != '\0')
+	i = 0;
+	while (i < height)
 	{
-		vec_char_push(v, *str);
-		str++;
+		free(array[i]);
+		i++;
 	}
+	free(array);
 }
 
-int	main(int argc, char **argv)
+void	free_all(t_data *data)
 {
-	int			fd;
-	char		*line;
-	t_vector	v;
+	free(data->textures.north);
+	free(data->textures.south);
+	free(data->textures.east);
+	free(data->textures.west);
+	vec_free(&data->strings);
+	clear_2d_array(data->map.array, data->map.height);
+	free(data);
+}
 
-	vec_init(&v, 50, sizeof(char), NULL);
-	if (argc != 2)
+int	main(int ac, char **av)
+{
+	t_data	*data;
+
+	if (ac != 2)
 		return (printf("Error\nWrong number of arguments\n"), 1);
-	fd = open(argv[1], O_RDONLY);
-	if (fd == -1)
-		return (printf("Error\nCould not open file\n"), 1);
-	while (line != NULL)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-			break ;
-		push_string(&v, line);
-		free(line);
-	}
-	printf("string: %s\n", return_string(&v));
-	free(v.data);
-	close(fd);
+	data = ft_calloc(1, sizeof(t_data));
+	if (!init(data, av[1]))
+		return (free_all(data), 1);
+	if (!parse(data))
+		return (free_all(data), 1);
+	printf("NO: %s\n", data->textures.north);
+	printf("SO: %s\n", data->textures.south);
+	printf("EA: %s\n", data->textures.east);
+	printf("WE: %s\n", data->textures.west);
+	printf("F: %d\n", data->textures.floor);
+	printf("C: %d\n", data->textures.ceiling);
+	printf("Map:\n");
+	printf("Width: %d\n", data->map.width);
+	printf("Height: %d\n", data->map.height);
+	free(data->textures.north);
+	free(data->textures.south);
+	free(data->textures.east);
+	free(data->textures.west);
+	vec_free(&data->strings);
+	clear_2d_array(data->map.array, data->map.height);
+	free(data);
 	return (0);
 }

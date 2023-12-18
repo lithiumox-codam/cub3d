@@ -2,10 +2,10 @@ NAME = CUB3D
 vpath %.c src
 vpath %.h include
 
-SRC = main.c parser/index.c
+SRC = main.c parser/index.c init/index.c parser/checker.c
 LIBS = MLX42/build/libmlx42.a libft/libft.a
 OBJS = $(addprefix build/, $(SRC:.c=.o))
-CODAM_FLAGS = -Wall -Wextra -Werror -Ofast -flto $(if $(DEBUG),-g3)
+CODAM_FLAGS = -Ofast -flto $(if $(DEBUG),-g3) #-Wall -Wextra -Werror
 INCLUDES = -I $(CURDIR)/include -I MLX42/include/MLX42 -I libft/includes
 MLX = MLX42/build/libmlx42.a
 LIBFT = libft/libft.a
