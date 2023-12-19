@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:30:43 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/19 19:55:40 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/19 19:59:40 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,13 +141,6 @@ static bool	handle_C(char *str, t_data *data)
 	return (true);
 }
 
-static bool	handle_NULL(char *str, t_data *data)
-{
-	(void)str;
-	(void)data;
-	return (printf("Error\nWrong argument type: %s\n", str), false);
-}
-
 typedef struct s_func
 {
 	char		*str;
@@ -164,7 +157,7 @@ static t_func	*return_arr(void)
 			{"EA", handle_EA},
 			{"F ", handle_F},
 			{"C ", handle_C},
-			{NULL, handle_NULL}};
+			{NULL, NULL}};
 	return (func_array);
 }
 
