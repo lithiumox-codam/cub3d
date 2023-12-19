@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:30:43 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/18 23:43:48 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/19 19:55:40 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,13 @@ static bool	handle_C(char *str, t_data *data)
 	return (true);
 }
 
+static bool	handle_NULL(char *str, t_data *data)
+{
+	(void)str;
+	(void)data;
+	return (printf("Error\nWrong argument type: %s\n", str), false);
+}
+
 typedef struct s_func
 {
 	char		*str;
@@ -157,7 +164,7 @@ static t_func	*return_arr(void)
 			{"EA", handle_EA},
 			{"F ", handle_F},
 			{"C ", handle_C},
-			{NULL, NULL}};
+			{NULL, handle_NULL}};
 	return (func_array);
 }
 
@@ -175,6 +182,8 @@ static bool	info_helper(t_data *data, char *str, t_func *arr, size_t *j)
 		}
 		(*j)++;
 	}
+	if (arr[*j].str == NULL)
+		return (printf("Error\nWrong argument type: %.2s\n", str), false);
 	return (true);
 }
 
@@ -263,20 +272,28 @@ static bool	player_helper(t_data *data, char p, size_t *j, size_t *k)
 {
 	if (data->player.x != 0 || data->player.y != 0)
 		return (printf("Error\nMultiple players\n"), false);
-	if (checkchar(p, "NSEW"))
-	{
-		if (p == 'N')
-			data->player.dir = 0;
-		else if (p == 'E')
-			data->player.dir = 90;
-		else if (p == 'S')
-			data->player.dir = 180;
-		else if (p == 'W')
-			data->player.dir = 270;
-	}
+	if (p == 'N')
+		data->player.dir = 0;
+	else if (p == 'E')
+		data->player.dir = 90;
+	else if (p == 'S')
+		data->player.dir = 180;
+	else if (p == 'W')
+		data->player.dir = 270;
 	data->player.x = *j;
 	data->player.y = *k;
 	data->map.array[*j][*k] = PLAYER;
+	return (true);
+}
+
+static bool	other_types_helper(t_data *data, char p, size_t *j, size_t *k)
+{
+	if (p == '1')
+		data->map.array[*j][*k] = WALL;
+	else if (p == '0')
+		data->map.array[*j][*k] = FLOOR;
+	else if (!checkchar(p, "NSEW10 \n"))
+		return (printf("Error\nInvalid character in map: %c\n", p), false);
 	return (true);
 }
 
@@ -301,13 +318,11 @@ static bool	apply_strings_to_array(t_data *data, size_t *i)
 		k = 0;
 		while (str[k] != '\0')
 		{
-			if (str[k] == '1')
-				data->map.array[j][k] = WALL;
-			else if (str[k] == '0')
-				data->map.array[j][k] = FLOOR;
-			else if (str[k] != ' ' && checkchar(str[k], "NSEW"))
+			if (checkchar(str[k], "NSEW"))
 				if (!player_helper(data, str[k], &j, &k))
 					return (false);
+			if (!other_types_helper(data, str[k], &j, &k))
+				return (false);
 			k++;
 		}
 		j++;
@@ -370,7 +385,7 @@ bool	parse(t_data *data)
 
 	i = 0;
 	if (!parse_info(data, &i))
-		return (printf("ERROR: Map info is invalid\n"), false);
+		return (false);
 	if (!parse_map(data, &i))
 		return (false);
 	return (true);
