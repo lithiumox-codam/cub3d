@@ -6,12 +6,18 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:20:25 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/18 23:22:06 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/20 16:31:38 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
+/**
+ * @brief A function that clears the map array.
+ *
+ * @param array The array to clear.
+ * @param height The height of the array.
+ */
 void	clear_2d_array(t_map_types **array, int height)
 {
 	int	i;
@@ -56,12 +62,6 @@ int	main(int ac, char **av)
 	printf("Map:\n");
 	printf("Width: %d\n", data->map.width);
 	printf("Height: %d\n", data->map.height);
-	free(data->textures.north);
-	free(data->textures.south);
-	free(data->textures.east);
-	free(data->textures.west);
-	vec_free(&data->strings);
-	clear_2d_array(data->map.array, data->map.height);
-	free(data);
+	free_all(data);
 	return (0);
 }
