@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:20:25 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/20 16:31:38 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/21 02:30:55 by lithium       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	main(int ac, char **av)
 		return (free_all(data), 1);
 	if (!parse(data))
 		return (free_all(data), 1);
+
 	printf("NO: %s\n", data->textures.north);
 	printf("SO: %s\n", data->textures.south);
 	printf("EA: %s\n", data->textures.east);

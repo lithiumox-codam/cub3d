@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 19:33:48 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/18 20:20:23 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/21 02:26:59 by lithium       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ typedef struct s_data
 	t_player	player;
 	t_vector	strings;
 	t_textures	textures;
+	union u_color
+	{
+		int		color;
+		char	rgb[4];
+	}			floor;
 }				t_data;
 
 #endif

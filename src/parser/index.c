@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:30:43 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/19 19:59:40 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/21 03:06:15 by lithium       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,19 +147,18 @@ typedef struct s_func
 	bool		(*func_ptr)(char *, t_data *);
 }				t_func;
 
-static t_func	*return_arr(void)
+static t_func	*return_arr(t_data *data)
 {
-	static t_func func_array[] =
-		{
-			{"NO", handle_NO},
-			{"SO", handle_SO},
-			{"WE", handle_WE},
-			{"EA", handle_EA},
-			{"F ", handle_F},
-			{"C ", handle_C},
-			{NULL, NULL}};
+	static t_func func_array[] = {{"NO", handle_NO}, {"SO", handle_SO}, {"WE",
+		handle_WE}, {"EA", handle_EA}, {"F ", handle_F}, {"C ", handle_C},
+		{NULL, NULL}};
 	return (func_array);
 }
+
+/**
+
+	* !TODO: Make all the path and RBGA function arbitrary to shrink the amount of functions.
+ */
 
 static bool	info_helper(t_data *data, char *str, t_func *arr, size_t *j)
 {
@@ -195,7 +194,7 @@ static bool	parse_info(t_data *data, size_t *i)
 	char	*str;
 	size_t	j;
 
-	func_array = return_arr();
+	func_array = return_arr(data);
 	j = 0;
 	while (*i < data->strings.length && *i < 6)
 	{

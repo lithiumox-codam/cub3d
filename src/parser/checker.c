@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/18 22:53:43 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/18 22:57:20 by mdekker       ########   odam.nl         */
+/*   Updated: 2023/12/21 02:21:44 by lithium       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ bool	check_floor(t_data *data)
 		x = 0;
 		while (x < data->map.width)
 		{
-			if (data->map.array[y][x] == FLOOR)
+			if (data->map.array[y][x] == FLOOR
+				|| data->map.array[y][x] == PLAYER)
 			{
 				if (x == 0 || x == data->map.width - 1 || y == 0
 					|| y == data->map.height - 1)
