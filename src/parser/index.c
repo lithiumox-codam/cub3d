@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:30:43 by mdekker       #+#    #+#                 */
-/*   Updated: 2024/01/04 18:09:48 by mdekker       ########   odam.nl         */
+/*   Updated: 2024/01/04 19:12:11 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ typedef struct s_func
 
 static t_func	*return_arr(t_data *data)
 {
-	static t_func	func_array[] = {{"SO", handle_SO}, {"WE", handle_WE}, {"EA",
-			handle_EA}, {"F ", handle_F}, {"C ", handle_C}, {NULL, NULL}};
+	static t_func	func_array[] = {{"NO", handle_NO}, {"SO", handle_SO}, {"WE",
+			handle_WE}, {"EA", handle_EA}, {"F ", handle_F}, {"C ", handle_C},
+			{NULL, NULL}};
 
 	return (func_array);
 }
