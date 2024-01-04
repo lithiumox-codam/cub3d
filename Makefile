@@ -2,7 +2,7 @@ NAME = CUB3D
 vpath %.c src
 vpath %.h include
 
-SRC = main.c parser/index.c init/index.c parser/checker.c
+SRC = main.c parser/index.c init/index.c parser/checker.c parser/array.c debug/array.c
 LIBS = MLX42/build/libmlx42.a libft/libft.a
 OBJS = $(addprefix build/, $(SRC:.c=.o))
 CODAM_FLAGS = -Ofast -flto $(if $(DEBUG),-g3) #-Wall -Wextra -Werror

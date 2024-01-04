@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:30:43 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/21 03:06:15 by lithium       ########   odam.nl         */
+/*   Updated: 2024/01/04 13:43:05 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,11 @@ static int	get_rgba(char *str)
 
 	i = 0;
 	split = ft_split(str, ',');
-	if (split == NULL)
-		return (printf("Error\nMalloc failed\n"), -1);
-	if (count_arr(split) != 3)
-		return (printf("Error\nWrong argument type\n"), -1);
+	if (split == NULL || count_arr(split) != 3)
+		return (printf("Error\nRGBA function failed. Wrong input.\n"), -1);
 	while (i < 3)
 	{
-		if (!ft_isdigit(split[i][0]))
+		if (checkstr(split[i], "0123456789") == 0)
 			return (printf("Error\nWrong argument type\n"), -1);
 		rgba[i] = ft_atoi(split[i]);
 		if (rgba[i] < 0 || rgba[i] > 255)
@@ -149,9 +147,10 @@ typedef struct s_func
 
 static t_func	*return_arr(t_data *data)
 {
-	static t_func func_array[] = {{"NO", handle_NO}, {"SO", handle_SO}, {"WE",
-		handle_WE}, {"EA", handle_EA}, {"F ", handle_F}, {"C ", handle_C},
-		{NULL, NULL}};
+	static t_func	func_array[] = {{"NO", handle_NO}, {"SO", handle_SO}, {"WE",
+			handle_WE}, {"EA", handle_EA}, {"F ", handle_F}, {"C ", handle_C},
+			{NULL, NULL}};
+
 	return (func_array);
 }
 
@@ -159,7 +158,6 @@ static t_func	*return_arr(t_data *data)
 
 	* !TODO: Make all the path and RBGA function arbitrary to shrink the amount of functions.
  */
-
 static bool	info_helper(t_data *data, char *str, t_func *arr, size_t *j)
 {
 	while (arr[*j].str != NULL)
@@ -206,147 +204,6 @@ static bool	parse_info(t_data *data, size_t *i)
 	if (*i != 6)
 		return (printf("Error\nMissing arguments\n"), false);
 	return (true);
-}
-
-/**
- * @brief Get the w maximum and h of the map
- *
- * @param data The main struct
- * @param i The index of the first string after the info
- */
-void	get_w_and_h(t_data *data, size_t *i)
-{
-	char	*str;
-	size_t	j;
-	size_t	start;
-
-	j = 0;
-	start = *i;
-	while (*i < data->strings.length)
-	{
-		str = *(char **)vec_get(&data->strings, *i);
-		if (ft_strlen(str) > j)
-			j = ft_strlen(str) - 1;
-		(*i)++;
-	}
-	data->map.width = j;
-	data->map.height = ((*i) - start);
-	(*i) = start;
-}
-
-bool	create_2d_arr(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	data->map.array = ft_calloc(data->map.height, sizeof(t_map_types **));
-	if (data->map.array == NULL)
-		return (printf("Error\nMalloc failed\n"), false);
-	while ((size_t)i < data->map.height)
-	{
-		data->map.array[i] = ft_calloc(data->map.width, sizeof(t_map_types));
-		if (data->map.array[i] == NULL)
-		{
-			while (i > 0)
-			{
-				free(data->map.array[i]);
-				i--;
-			}
-			free(data->map.array);
-			return (printf("Error\nMalloc failed\n"), false);
-		}
-		i++;
-	}
-	return (true);
-}
-
-static bool	player_helper(t_data *data, char p, size_t *j, size_t *k)
-{
-	if (data->player.x != 0 || data->player.y != 0)
-		return (printf("Error\nMultiple players\n"), false);
-	if (p == 'N')
-		data->player.dir = 0;
-	else if (p == 'E')
-		data->player.dir = 90;
-	else if (p == 'S')
-		data->player.dir = 180;
-	else if (p == 'W')
-		data->player.dir = 270;
-	data->player.x = *j;
-	data->player.y = *k;
-	data->map.array[*j][*k] = PLAYER;
-	return (true);
-}
-
-static bool	other_types_helper(t_data *data, char p, size_t *j, size_t *k)
-{
-	if (p == '1')
-		data->map.array[*j][*k] = WALL;
-	else if (p == '0')
-		data->map.array[*j][*k] = FLOOR;
-	else if (!checkchar(p, "NSEW10 \n"))
-		return (printf("Error\nInvalid character in map: %c\n", p), false);
-	return (true);
-}
-
-/**
- * @brief Apply the strings to the map array
- *
- * @param data The main struct
- * @param i The index of the first string after the info
- * @return true When all strings are applied succesfully
- * @return false When an error occurs
- */
-static bool	apply_strings_to_array(t_data *data, size_t *i)
-{
-	char	*str;
-	size_t	j;
-	size_t	k;
-
-	j = 0;
-	while (*i < data->strings.length)
-	{
-		str = *(char **)vec_get(&data->strings, *i);
-		k = 0;
-		while (str[k] != '\0')
-		{
-			if (checkchar(str[k], "NSEW"))
-				if (!player_helper(data, str[k], &j, &k))
-					return (false);
-			if (!other_types_helper(data, str[k], &j, &k))
-				return (false);
-			k++;
-		}
-		j++;
-		(*i)++;
-	}
-	return (true);
-}
-
-void	print_array(t_data *data)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < data->map.height)
-	{
-		j = 0;
-		while (j < data->map.width)
-		{
-			if (data->map.array[i][j] == WALL)
-				printf("🟥");
-			else if (data->map.array[i][j] == FLOOR)
-				printf("⬜️");
-			else if (data->map.array[i][j] == PLAYER)
-				printf("👶");
-			else if (data->map.array[i][j] == EMPTY)
-				printf("⬛️");
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
 }
 
 /**

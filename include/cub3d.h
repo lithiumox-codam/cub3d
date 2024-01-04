@@ -6,7 +6,7 @@
 /*   By: mdekker <mdekker@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/12/17 16:08:19 by mdekker       #+#    #+#                 */
-/*   Updated: 2023/12/18 23:49:42 by mdekker       ########   odam.nl         */
+/*   Updated: 2024/01/04 13:36:07 by mdekker       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,14 @@ bool	check_floor(t_data *data);
 
 /*
  ** Parser
-*/
+ */
 bool	parse(t_data *data);
+bool	apply_strings_to_array(t_data *data, size_t *i);
+bool	create_2d_arr(t_data *data);
+void	get_w_and_h(t_data *data, size_t *i);
 
+/*
+ ** Debug
+ */
+void	print_array(t_data *data);
 #endif
